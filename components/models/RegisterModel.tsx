@@ -1,25 +1,29 @@
-import useLoginModel from "@/hooks/useLoginModel";
+import useRegisterModel from "@/hooks/useRegisterModel";
 import React, { useCallback, useState } from "react";
 import Input from "../Input";
 import Modal from "../Modal";
+import useLoginModel from "@/hooks/useLoginModel";
 
 interface LoginModelProps {}
-const LoginModel: React.FC<LoginModelProps> = ({}) => {
+const RegisterModel: React.FC<LoginModelProps> = ({}) => {
   const loginModel = useLoginModel();
+  const registerModel = useRegisterModel();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = useCallback(() => {
     try {
-      setIsLoading(true);
-      // TODO ADD LOG IN
+      // TODO REGISTER ADD LOG IN
 
-      loginModel.onClose();
+      registerModel.onClose();
     } catch (error) {
       console.error(error);
     }
-  }, [loginModel]);
+  }, [registerModel]);
 
   const bodyContent = (
     <>
@@ -28,6 +32,18 @@ const LoginModel: React.FC<LoginModelProps> = ({}) => {
           placeholder="Email"
           onChange={(event) => setEmail(event.target.value)}
           value={email}
+          disabled={isLoading}
+        />
+        <Input
+          placeholder="Name"
+          onChange={(event) => setName(event.target.value)}
+          value={name}
+          disabled={isLoading}
+        />
+        <Input
+          placeholder="Username"
+          onChange={(event) => setUsername(event.target.value)}
+          value={username}
           disabled={isLoading}
         />
         <Input
@@ -44,10 +60,10 @@ const LoginModel: React.FC<LoginModelProps> = ({}) => {
     <>
       <Modal
         disabled={isLoading}
-        isOpen={loginModel.isOpen}
-        title="Login"
-        actionLabel="Sign In"
-        onClose={loginModel.onClose}
+        isOpen={registerModel.isOpen}
+        title="Create an Account"
+        actionLabel="Sign Up"
+        onClose={registerModel.onClose}
         onSubmit={onSubmit}
         body={bodyContent}
       />
@@ -55,4 +71,4 @@ const LoginModel: React.FC<LoginModelProps> = ({}) => {
   );
 };
 
-export default LoginModel;
+export default RegisterModel;
