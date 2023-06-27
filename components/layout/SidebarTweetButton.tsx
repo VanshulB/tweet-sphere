@@ -1,14 +1,19 @@
+import useLoginModel from "@/hooks/useLoginModel";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useCallback } from "react";
 import { FaFeather } from "react-icons/fa";
 
 interface SidebarTweetButtonProps {}
 const SidebarTweetButton: React.FC<SidebarTweetButtonProps> = ({}) => {
   const router = useRouter();
+  const loginModel = useLoginModel();
 
+  const onClick = useCallback(() => {
+    loginModel.onOpen();
+  }, [loginModel]);
   return (
     <>
-      <div onClick={() => router.push("/")}>
+      <div onClick={onClick}>
         <div
           className="
 					mt-6 
@@ -43,7 +48,7 @@ const SidebarTweetButton: React.FC<SidebarTweetButtonProps> = ({}) => {
 					"
         >
           <p className="hidden lg:block text-center font-semibold text-white text-[20px]">
-            Tweet
+            Sphere
           </p>
         </div>
       </div>
