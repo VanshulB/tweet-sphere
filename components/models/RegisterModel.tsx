@@ -15,8 +15,15 @@ const RegisterModel: React.FC<LoginModelProps> = ({}) => {
   const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const onSubmit = useCallback(() => {
+  const onToggle = useCallback(() => {
+    if (isLoading) return;
+    registerModel.onClose();
+    loginModel.onOpen();
+  }, [isLoading, registerModel, loginModel]);
+
+  const onSubmit = useCallback(async () => {
     try {
+      setIsLoading(true);
       // TODO REGISTER ADD LOG IN
 
       registerModel.onClose();
@@ -56,6 +63,22 @@ const RegisterModel: React.FC<LoginModelProps> = ({}) => {
     </>
   );
 
+  const footerContent = (
+    <>
+      <div className="text-neutral-400 text-center mt-4">
+        <p className="">
+          Already have an Account?{" "}
+          <span
+            className="text-white cursor-pointer hover:underline"
+            onClick={onToggle}
+          >
+            Sign In
+          </span>
+        </p>
+      </div>
+    </>
+  );
+
   return (
     <>
       <Modal
@@ -66,6 +89,7 @@ const RegisterModel: React.FC<LoginModelProps> = ({}) => {
         onClose={registerModel.onClose}
         onSubmit={onSubmit}
         body={bodyContent}
+        footer={footerContent}
       />
     </>
   );
