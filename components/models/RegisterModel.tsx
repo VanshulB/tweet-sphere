@@ -3,6 +3,9 @@ import React, { useCallback, useState } from "react";
 import Input from "../Input";
 import Modal from "../Modal";
 import useLoginModel from "@/hooks/useLoginModel";
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import { signIn } from "next-auth/react";
 
 interface LoginModelProps {}
 const RegisterModel: React.FC<LoginModelProps> = ({}) => {
@@ -24,13 +27,27 @@ const RegisterModel: React.FC<LoginModelProps> = ({}) => {
   const onSubmit = useCallback(async () => {
     try {
       setIsLoading(true);
-      // TODO REGISTER ADD LOG IN
+
+      await axios.post("/api/register", {
+        email,
+        password,
+        username,
+        name,
+      });
+
+      toast.success("Account Created");
+
+      signIn("credentials", {
+        email,
+        password,
+      });
 
       registerModel.onClose();
     } catch (error) {
+      toast.error("Something went wrong");
       console.error(error);
     }
-  }, [registerModel]);
+  }, [registerModel, email, password, username, name]);
 
   const bodyContent = (
     <>
@@ -56,6 +73,7 @@ const RegisterModel: React.FC<LoginModelProps> = ({}) => {
         <Input
           placeholder="Password"
           onChange={(event) => setPassword(event.target.value)}
+          type="password"
           value={password}
           disabled={isLoading}
         />

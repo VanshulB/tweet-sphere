@@ -3,6 +3,7 @@ import React, { useCallback, useState } from "react";
 import Input from "../Input";
 import Modal from "../Modal";
 import useRegisterModel from "@/hooks/useRegisterModel";
+import { signIn } from "next-auth/react";
 
 interface LoginModelProps {}
 const LoginModel: React.FC<LoginModelProps> = ({}) => {
@@ -18,16 +19,19 @@ const LoginModel: React.FC<LoginModelProps> = ({}) => {
     registerModel.onOpen();
   }, [isLoading, registerModel, loginModel]);
 
-  const onSubmit = useCallback(() => {
+  const onSubmit = useCallback(async () => {
     try {
       setIsLoading(true);
       // TODO ADD LOG IN
-
+      await signIn("credentials", {
+        email,
+        password,
+      });
       loginModel.onClose();
     } catch (error) {
       console.error(error);
     }
-  }, [loginModel]);
+  }, [loginModel, email, password]);
 
   const bodyContent = (
     <>
@@ -40,6 +44,7 @@ const LoginModel: React.FC<LoginModelProps> = ({}) => {
         />
         <Input
           placeholder="Password"
+          type="password"
           onChange={(event) => setPassword(event.target.value)}
           value={password}
           disabled={isLoading}
